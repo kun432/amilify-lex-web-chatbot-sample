@@ -1,26 +1,56 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <amplify-chatbot
+        bot-title="Chatbot Lex"
+        bot-name="BookTrip_jaJP"
+        welcome-message="ホテルとレンタカーの予約ができますよ。どうしますか？"
+        voice-enabled="{true}"
+    >
+        <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
+        <div slot="header" className="custom-header">
+            <img
+                src="https://raw.githubusercontent.com/aws-amplify/amplify-js/main/vscode/images/logo.png"
+                height="40"
+            />
+            Amplify Chatbot
+        </div>
+    </amplify-chatbot>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+const handleChatComplete = (event) => {
+    const { data, err } = event.detail;
+    if (data) alert('success!\n' + JSON.stringify(data));
+    if (err) alert(err);
+};
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+    name: 'App',
+    components: {},
+    mounted() {
+        this.$el.addEventListener('chatCompleted', handleChatComplete);
+    },
+    beforeUnmount() {
+        this.$el.removeEventListener('chatCompleted', handleChatComplete);
+    },
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+:root {
+  --amplify-primary-color: #fd8abd;
+}
+
+amplify-chatbot {
+  --width: 450px;
+  --height: 600px;
+  --header-color: rgb(40, 40, 40);
+  --bot-background-color: #eaebff;
+  --bot-text-color: rgb(40, 40, 40);
+  --user-background-color: #fd8abd;
+}
+
+.custom-header {
+  padding: 1.25rem 0.375rem 1.25rem 0.375rem;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  font-size: 1.6rem;
 }
 </style>
